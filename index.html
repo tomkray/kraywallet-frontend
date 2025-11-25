@@ -3,12 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KRAY STATION - Bitcoin Ordinals & Runes Marketplace</title>
-    <link rel="icon" type="image/png" href="kraywallet/logotk.png">
-    <link rel="stylesheet" href="styles.css">
+    <title>KRAY STATION - Bitcoin Ordinals & Runes</title>
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/tomkray/kraywallet-extension/main/assets/logo-kraywallet.png">
     <style>
-        /* Landing Hero Minimalista */
-        .landing-hero-minimal {
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #000;
+            color: #fff;
+            line-height: 1.6;
+        }
+        
+        /* Wallet Section Minimalista */
+        .wallet-hero {
             min-height: 60vh;
             display: flex;
             flex-direction: column;
@@ -19,133 +26,119 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
         
-        .wallet-logo {
-            width: 140px;
-            height: 140px;
-            margin-bottom: 30px;
-            opacity: 0.95;
-        }
+        .wallet-logo { width: 120px; height: 120px; margin-bottom: 30px; }
+        .wallet-title { font-size: 42px; font-weight: 800; margin-bottom: 12px; }
+        .wallet-subtitle { font-size: 16px; color: #888; margin-bottom: 40px; }
         
-        .wallet-title {
-            font-size: 48px;
-            font-weight: 800;
-            margin-bottom: 16px;
-            color: #fff;
-        }
-        
-        .wallet-subtitle {
-            font-size: 18px;
-            color: #888;
-            margin-bottom: 50px;
-            text-align: center;
-            max-width: 600px;
-        }
-        
-        .download-section {
-            display: flex;
-            gap: 16px;
-            align-items: center;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        
-        .btn-download-primary {
-            padding: 16px 40px;
+        .btn-download {
+            display: inline-block;
+            padding: 14px 36px;
             background: #10b981;
             color: #fff;
-            border-radius: 12px;
             text-decoration: none;
+            border-radius: 10px;
             font-weight: 600;
-            font-size: 16px;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            transition: all 0.2s;
+            margin: 8px;
         }
-        
-        .btn-download-primary:hover {
-            background: #059669;
-        }
+        .btn-download:hover { background: #059669; }
         
         .btn-link {
-            padding: 16px 32px;
+            display: inline-block;
+            padding: 14px 28px;
             background: transparent;
             color: #888;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 12px;
             text-decoration: none;
-            font-weight: 500;
-            font-size: 14px;
-            transition: all 0.2s;
+            border: 1px solid #333;
+            border-radius: 10px;
+            margin: 8px;
+        }
+        .btn-link:hover { color: #fff; border-color: #555; }
+        
+        /* Marketplace Section */
+        .marketplace {
+            padding: 60px 20px;
+            background: #0a0a0a;
         }
         
-        .btn-link:hover {
-            color: #fff;
-            border-color: rgba(255, 255, 255, 0.4);
-        }
+        .container { max-width: 1200px; margin: 0 auto; }
         
-        .platforms-minimal {
-            display: flex;
-            gap: 12px;
-            margin-top: 30px;
-            justify-content: center;
-        }
-        
-        .platform-badge {
-            padding: 8px 16px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 20px;
-            font-size: 12px;
-            color: #666;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .platform-badge.active {
-            background: rgba(16, 185, 129, 0.1);
-            color: #10b981;
-            border-color: #10b981;
-        }
-        
-        /* Chrome Web Store Notice */
-        .store-notice {
-            margin-top: 40px;
-            padding: 20px 30px;
-            background: rgba(59, 130, 246, 0.1);
-            border: 1px solid rgba(59, 130, 246, 0.3);
-            border-radius: 12px;
-            max-width: 600px;
+        .section-title {
+            font-size: 36px;
+            font-weight: 800;
             text-align: center;
+            margin-bottom: 50px;
         }
         
-        .store-notice-title {
-            color: #60a5fa;
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+        
+        .card {
+            background: #1a1a1a;
+            border: 1px solid #222;
+            border-radius: 16px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        
+        .card:hover {
+            border-color: #10b981;
+            transform: translateY(-4px);
+        }
+        
+        .card-icon { font-size: 48px; margin-bottom: 20px; }
+        .card-title { font-size: 20px; font-weight: 700; margin-bottom: 12px; }
+        .card-desc { color: #888; font-size: 14px; line-height: 1.6; }
+        
+        .card-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 24px;
+            background: #10b981;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 14px;
             font-weight: 600;
-            margin-bottom: 8px;
+        }
+        
+        /* Footer */
+        footer {
+            padding: 40px 20px;
+            text-align: center;
+            border-top: 1px solid #222;
+            color: #666;
             font-size: 14px;
         }
         
-        .store-notice-text {
+        footer a {
             color: #888;
-            font-size: 13px;
-            line-height: 1.6;
+            text-decoration: none;
+            margin: 0 12px;
         }
+        
+        footer a:hover { color: #10b981; }
     </style>
 </head>
 <body>
-    <!-- Landing Hero Minimalista -->
-    <section class="landing-hero-minimal">
-        <img src="kraywallet-extension/assets/logo-kraywallet.png" alt="KrayWallet" class="wallet-logo">
+    <!-- Wallet Download Section -->
+    <section class="wallet-hero">
+        <img src="https://raw.githubusercontent.com/tomkray/kraywallet-extension/main/assets/logo-kraywallet.png" 
+             alt="KrayWallet" 
+             class="wallet-logo"
+             onerror="this.style.display='none'">
         
         <h1 class="wallet-title">KrayWallet</h1>
-        
         <p class="wallet-subtitle">
-            Bitcoin wallet with Ordinals and Runes support<br>
-            Self-custodial • Secure • Open Source
+            Bitcoin Wallet with Ordinals & Runes Support
         </p>
         
-        <div class="download-section">
+        <div>
             <a href="https://github.com/tomkray/kraywallet-extension/archive/refs/heads/main.zip" 
-               class="btn-download-primary"
+               class="btn-download"
                download>
                 🦊 Download Extension
             </a>
@@ -155,120 +148,52 @@
                 View on GitHub
             </a>
         </div>
-        
-        <div class="platforms-minimal">
-            <span class="platform-badge active">Chrome Extension</span>
-            <span class="platform-badge">iOS (Soon)</span>
-            <span class="platform-badge">Android (Soon)</span>
-        </div>
-        
-        <div class="store-notice">
-            <div class="store-notice-title">🚀 Chrome Web Store Submission</div>
-            <div class="store-notice-text">
-                KrayWallet is being submitted to Chrome Web Store.<br>
-                After approval, you'll be able to install with 1-click like Unisat/Xverse.<br>
-                For now, download and install manually (takes 1 minute).
-            </div>
-        </div>
     </section>
-
-    <!-- Navbar Original (KRAY STATION Marketplace) -->
-    <nav class="navbar">
+    
+    <!-- Marketplace Section -->
+    <section class="marketplace">
         <div class="container">
-            <div class="nav-brand">
-                <img src="kraywallet/logo.png" alt="KRAY STATION Logo" class="nav-logo">
-                <div class="nav-title">
-                    <h1>KRAY STATION</h1>
-                    <span class="nav-subtitle">Bitcoin Ordinals & Runes Marketplace</span>
+            <h2 class="section-title">KRAY STATION Marketplace</h2>
+            
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-icon">🔍</div>
+                    <h3 class="card-title">KrayScan Explorer</h3>
+                    <p class="card-desc">
+                        Bitcoin transaction explorer with Ordinals and Runes enrichment
+                    </p>
+                    <a href="/krayscan.html" class="card-link">Open Explorer</a>
                 </div>
-            </div>
-            <div class="nav-links">
-                <a href="ordinals.html" class="nav-link">Ordinals</a>
-                <a href="runes-swap.html" class="nav-link">Runes Swap</a>
-                <a href="krayscan.html" class="nav-link">Explorer</a>
-                <button class="wallet-btn" id="connectWallet">
-                    <span class="wallet-text">Connect Wallet</span>
-                </button>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Rest of original marketplace content -->
-    <section class="landing-hero">
-        <div class="container">
-            <div class="hero-content-landing">
-                <h1 class="hero-title-landing">
-                    Bitcoin Ordinals & Runes<br>
-                    <span class="gradient-text">Marketplace</span>
-                </h1>
-                <p class="hero-subtitle-landing">
-                    Trade inscriptions and runes directly on Bitcoin.<br>
-                    No middleman. No service fees. True peer-to-peer atomic swaps.
-                </p>
-                <div class="hero-cta">
-                    <a href="ordinals.html" class="btn-cta">Explore Ordinals</a>
-                    <a href="runes-swap.html" class="btn-cta-outline">Swap Runes</a>
+                
+                <div class="card">
+                    <div class="card-icon">📜</div>
+                    <h3 class="card-title">Ordinals Marketplace</h3>
+                    <p class="card-desc">
+                        Trade Bitcoin inscriptions with atomic swaps
+                    </p>
+                    <a href="/ordinals.html" class="card-link">View Ordinals</a>
+                </div>
+                
+                <div class="card">
+                    <div class="card-icon">🪙</div>
+                    <h3 class="card-title">Runes Swap</h3>
+                    <p class="card-desc">
+                        On-chain DEX for Runes tokens
+                    </p>
+                    <a href="/runes-swap.html" class="card-link">Swap Runes</a>
                 </div>
             </div>
         </div>
     </section>
-
-    <!-- Features Section -->
-    <section class="features-section">
-        <div class="container">
-            <h2 class="section-title">Why KRAY STATION?</h2>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">🔐</div>
-                    <h3>Self-Custodial</h3>
-                    <p>You control your keys and Bitcoin. No intermediaries.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">⚛️</div>
-                    <h3>Atomic Swaps</h3>
-                    <p>True P2P trades using Bitcoin Script. Trustless.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🆓</div>
-                    <h3>Zero Fees</h3>
-                    <p>No platform fees. Only Bitcoin network fees.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">⚡</div>
-                    <h3>Lightning DEX</h3>
-                    <p>Instant swaps on Lightning Network. Low fees.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
+    
     <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h4>KRAY STATION</h4>
-                    <p>Bitcoin Ordinals & Runes Marketplace</p>
-                </div>
-                <div class="footer-section">
-                    <h4>Products</h4>
-                    <a href="ordinals.html">Ordinals Marketplace</a>
-                    <a href="runes-swap.html">Runes Swap</a>
-                    <a href="krayscan.html">KrayScan Explorer</a>
-                    <a href="https://github.com/tomkray/kraywallet-extension">KrayWallet</a>
-                </div>
-                <div class="footer-section">
-                    <h4>Community</h4>
-                    <a href="https://github.com/tomkray" target="_blank">GitHub</a>
-                    <a href="mailto:support@kraywallet.com">Support</a>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>© 2025 KRAY STATION. Made with ❤️ for Bitcoin.</p>
-            </div>
+    <footer>
+        <div>
+            <a href="https://github.com/tomkray">GitHub</a>
+            <a href="/krayscan.html">Explorer</a>
+            <a href="mailto:support@kraywallet.com">Support</a>
         </div>
+        <p style="margin-top: 20px;">© 2025 KRAY STATION • Made with ❤️ for Bitcoin</p>
     </footer>
-
-    <script src="js/wallet-connect.js"></script>
 </body>
 </html>
