@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KrayScan - KRAY STATION</title>
+    <link rel="icon" type="image/png" href="kraywallet/logotk.png">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="krayscan-styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* KrayScan-specific styles */
+        .krayscan-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: var(--spacing-3xl) var(--spacing-2xl);
+        }
+
+        /* Search Bar */
+        .search-section {
+            background: var(--color-bg-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-3xl);
+            margin-bottom: var(--spacing-3xl);
+        }
+
+        .search-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: var(--spacing-sm);
+            color: var(--color-text-primary);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+        }
+
+        .search-subtitle {
+            font-size: 14px;
+            color: var(--color-text-secondary);
+            margin-bottom: var(--spacing-2xl);
+        }
+
+        .search-form {
+            display: flex;
+            gap: var(--spacing-md);
+        }
+
+        .search-input {
+            flex: 1;
+            background: var(--color-bg-secondary);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-lg);
+            font-size: 15px;
+            color: var(--color-text-primary);
+            font-family: var(--font-mono);
+            transition: all var(--transition-base);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--color-border-active);
+            background: var(--color-bg-tertiary);
+        }
+
+        .search-input::placeholder {
+            color: var(--color-text-tertiary);
+        }
+
+        .search-btn {
+            background: var(--color-accent);
+            color: #000;
+            border: none;
+            border-radius: var(--radius-md);
+            padding: 0 var(--spacing-3xl);
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-base);
+        }
+
+        .search-btn:hover {
+            background: var(--color-accent-hover);
+            transform: translateY(-2px);
+        }
+
+        /* Loading State */
+        .loading-state {
+            text-align: center;
+            padding: var(--spacing-4xl);
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid var(--color-border);
+            border-top-color: var(--color-accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto var(--spacing-2xl);
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Header genérico */
+        .content-header {
+            background: var(--color-bg-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-3xl);
+            margin-bottom: var(--spacing-2xl);
+        }
+
+        .content-label {
+            font-size: 12px;
+            color: var(--color-text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .content-hash {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--color-text-primary);
+            font-family: var(--font-mono);
+            word-break: break-all;
+            margin-bottom: var(--spacing-2xl);
+        }
+
+        .content-badges {
+            display: flex;
+            gap: var(--spacing-md);
+            flex-wrap: wrap;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            padding: var(--spacing-sm) var(--spacing-lg);
+            border-radius: var(--radius-full);
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .status-confirmed {
+            background: rgba(52, 199, 89, 0.1);
+            color: var(--color-success);
+            border: 1px solid rgba(52, 199, 89, 0.2);
+        }
+
+        .status-pending {
+            background: rgba(255, 149, 0, 0.1);
+            color: var(--color-warning);
+            border: 1px solid rgba(255, 149, 0, 0.2);
+        }
+
+        /* Grid Layout */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--spacing-2xl);
+            margin-bottom: var(--spacing-2xl);
+        }
+
+        .info-card {
+            background: var(--color-bg-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-2xl);
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--color-text-primary);
+            margin-bottom: var(--spacing-lg);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: var(--spacing-md) 0;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-key {
+            font-size: 14px;
+            color: var(--color-text-secondary);
+        }
+
+        .info-value {
+            font-size: 14px;
+            color: var(--color-text-primary);
+            font-family: var(--font-mono);
+            font-weight: 500;
+        }
+
+        /* Balance Display (para Address) */
+        .balance-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+            border: 1px solid var(--color-border-active);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-3xl);
+            margin-bottom: var(--spacing-2xl);
+            text-align: center;
+        }
+
+        .balance-amount {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--color-success);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .balance-label {
+            font-size: 14px;
+            color: var(--color-text-secondary);
+        }
+
+        /* Runestone Section */
+        .runestone-section {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+            border: 1px solid var(--color-border-active);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-3xl);
+            margin-bottom: var(--spacing-2xl);
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--color-text-primary);
+            margin-bottom: var(--spacing-2xl);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+        }
+
+        .cenotaph-warning {
+            background: rgba(255, 59, 48, 0.1);
+            border: 1px solid rgba(255, 59, 48, 0.3);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-lg);
+            color: var(--color-danger);
+            margin-bottom: var(--spacing-2xl);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+        }
+
+        /* Runes List (para Address) */
+        .runes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: var(--spacing-lg);
+        }
+
+        .rune-card {
+            background: var(--color-bg-secondary);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-lg);
+            transition: all var(--transition-base);
+        }
+
+        .rune-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--color-border-hover);
+        }
+
+        .rune-header {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .rune-thumbnail {
+            width: 50px;
+            height: 50px;
+            border-radius: var(--radius-sm);
+            object-fit: cover;
+            border: 1px solid var(--color-border);
+        }
+
+        .rune-info {
+            flex: 1;
+        }
+
+        .rune-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--color-text-primary);
+        }
+
+        .rune-amount {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--color-success);
+        }
+
+        /* Inscriptions */
+        .inscriptions-section {
+            background: var(--color-bg-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-3xl);
+            margin-bottom: var(--spacing-2xl);
+        }
+
+        .inscriptions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: var(--spacing-lg);
+        }
+
+        .inscription-card {
+            background: var(--color-bg-secondary);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            transition: all var(--transition-base);
+            cursor: pointer;
+        }
+
+        .inscription-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--color-border-hover);
+            box-shadow: var(--shadow-md);
+        }
+
+        .inscription-preview {
+            width: 100%;
+            height: 150px;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .inscription-preview img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .inscription-info {
+            padding: var(--spacing-md);
+            text-align: center;
+        }
+
+        .inscription-number {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--color-text-primary);
+        }
+
+        /* UTXOs & Transactions */
+        .list-section {
+            background: var(--color-bg-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-3xl);
+            margin-bottom: var(--spacing-2xl);
+        }
+
+        .list-items {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-md);
+        }
+
+        .list-item {
+            background: var(--color-bg-secondary);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-lg);
+            transition: all var(--transition-base);
+            cursor: pointer;
+        }
+
+        .list-item:hover {
+            border-color: var(--color-border-hover);
+        }
+
+        .item-index {
+            font-size: 11px;
+            color: var(--color-text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .item-content {
+            font-size: 14px;
+            font-family: var(--font-mono);
+            color: var(--color-text-primary);
+            word-break: break-all;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .item-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--color-success);
+        }
+
+        .item-script {
+            font-size: 11px;
+            font-family: var(--font-mono);
+            color: var(--color-text-tertiary);
+            margin-top: var(--spacing-sm);
+            padding: var(--spacing-sm);
+            background: #000;
+            border-radius: var(--radius-sm);
+            overflow-x: auto;
+            word-break: break-all;
+        }
+
+        /* Error */
+        .error-message {
+            background: rgba(255, 59, 48, 0.1);
+            border: 1px solid rgba(255, 59, 48, 0.3);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-4xl);
+            text-align: center;
+            color: var(--color-danger);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .search-form {
+                flex-direction: column;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .runes-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .inscriptions-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar (Padrão Kray Station) -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <img src="kraywallet/logo.png" alt="KRAY STATION Logo" class="nav-logo">
+                <div class="nav-title">
+                    <h1>KRAY STATION</h1>
+                    <span class="nav-subtitle">KrayScan - Bitcoin Explorer</span>
+                </div>
+            </div>
+            <div class="nav-links">
+                <a href="/" class="nav-link">Home</a>
+                <a href="ordinals.html" class="nav-link">Ordinals</a>
+                <a href="runes-swap.html" class="nav-link">Runes</a>
+                <a href="krayscan.html" class="nav-link" style="color: var(--color-text-primary);">KrayScan</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="krayscan-container">
+        <!-- Search Section -->
+        <div class="search-section">
+            <div class="search-title">🔍 KrayScan</div>
+            <div class="search-subtitle">Search for transactions or addresses on Bitcoin blockchain</div>
+            <form class="search-form" id="searchForm">
+                <input 
+                    type="text" 
+                    class="search-input" 
+                    id="searchInput"
+                    placeholder="Enter TXID (64 hex chars) or Address (bc1...)"
+                    autofocus
+                >
+                <button type="submit" class="search-btn">Search</button>
+            </form>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loading" class="loading-state" style="display: none;">
+            <div class="loading-spinner"></div>
+            <p style="color: var(--color-text-secondary);">Loading...</p>
+        </div>
+
+        <!-- Error State -->
+        <div id="error" class="error-message" style="display: none;">
+            <h2>❌ Error</h2>
+            <p id="error-message"></p>
+        </div>
+
+        <!-- TX Content (quando buscar TXID) -->
+        <div id="tx-content" style="display: none;"></div>
+
+        <!-- Address Content (quando buscar Address) -->
+        <div id="address-content" style="display: none;"></div>
+
+        <!-- Inscription Content (quando buscar Inscription ID) -->
+        <div id="inscription-content" style="display: none;"></div>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="krayscan.js?v=1763350000"></script>
+</body>
+</html>

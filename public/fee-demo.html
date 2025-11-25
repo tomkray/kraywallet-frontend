@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fee Selector Demo - PSBT Ordinals</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        body {
+            background: #0f1922;
+            color: #fff;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #00ff88 0%, #00ddff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header p {
+            color: #888;
+        }
+
+        .demo-section {
+            background: #1a1a2e;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .demo-section h2 {
+            margin-top: 0;
+            color: #00ff88;
+        }
+
+        .selected-fee-display {
+            background: rgba(0, 255, 136, 0.1);
+            border: 2px solid #00ff88;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .selected-fee-display h3 {
+            margin: 0 0 10px 0;
+            color: #00ff88;
+        }
+
+        .selected-fee-display .fee-amount {
+            font-size: 48px;
+            font-weight: bold;
+            color: #fff;
+            margin: 10px 0;
+        }
+
+        .selected-fee-display .fee-details {
+            color: #888;
+            font-size: 14px;
+        }
+
+        .example-code {
+            background: #0f1922;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+            overflow-x: auto;
+        }
+
+        .example-code pre {
+            margin: 0;
+            color: #00ff88;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 12px 24px;
+            background: #00ff88;
+            color: #0f1922;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .back-link:hover {
+            background: #00dd77;
+            transform: translateY(-2px);
+        }
+
+        .info-box {
+            background: rgba(0, 136, 255, 0.1);
+            border-left: 4px solid #0088ff;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .info-box h4 {
+            margin-top: 0;
+            color: #0088ff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>💰 Fee Selector Component</h1>
+            <p>Seletor de taxas com dados em tempo real da Mempool.space</p>
+        </div>
+
+        <div class="demo-section">
+            <h2>🎯 Demo Interativa</h2>
+            <p>Selecione uma opção de taxa abaixo. Os valores são atualizados automaticamente da rede Bitcoin.</p>
+            
+            <!-- Fee Selector será renderizado aqui -->
+            <div id="feeSelector"></div>
+
+            <!-- Display da taxa selecionada -->
+            <div class="selected-fee-display">
+                <h3>Taxa Selecionada</h3>
+                <div class="fee-amount" id="selectedFeeAmount">10 sat/vB</div>
+                <div class="fee-details" id="selectedFeeDetails">Medium Priority (~1 hour)</div>
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <h2>📝 Como Usar</h2>
+            
+            <div class="info-box">
+                <h4>✅ Recursos Implementados</h4>
+                <ul>
+                    <li>🌐 Fees em tempo real da <strong>Mempool.space</strong></li>
+                    <li>🔄 Fallback automático para <strong>Bitcoin Core</strong></li>
+                    <li>⚡ 5 opções: High, Fast (30min), Medium, Low, Custom</li>
+                    <li>⚙️ Customização livre (1-1000 sat/vB)</li>
+                    <li>🔄 Botão de atualização manual</li>
+                    <li>📊 Estimativas de tempo de confirmação</li>
+                </ul>
+            </div>
+
+            <h3>Incluir no HTML</h3>
+            <div class="example-code">
+                <pre>&lt;!-- Fee Selector Container --&gt;
+&lt;div id="feeSelector"&gt;&lt;/div&gt;
+
+&lt;!-- Script do Componente --&gt;
+&lt;script src="/public/js/feeSelector.js"&gt;&lt;/script&gt;</pre>
+            </div>
+
+            <h3>Inicializar no JavaScript</h3>
+            <div class="example-code">
+                <pre>// Básico
+const feeSelector = new FeeSelector('feeSelector');
+
+// Com opções
+const feeSelector = new FeeSelector('feeSelector', {
+    defaultMode: 'medium',  // high, halfHour, medium, low, custom
+    allowCustom: true,      // Permitir fee customizada
+    minFee: 1,              // Fee mínima
+    maxFee: 1000,           // Fee máxima
+    onChange: (fee) => {    // Callback quando fee muda
+        console.log('Nova fee selecionada:', fee);
+    }
+});</pre>
+            </div>
+
+            <h3>Obter Valor Selecionado</h3>
+            <div class="example-code">
+                <pre>// Obter fee selecionada
+const selectedFee = feeSelector.getSelectedFee();
+console.log('Fee:', selectedFee, 'sat/vB');
+
+// Obter tempo estimado
+const estimatedTime = feeSelector.getEstimatedTime();
+console.log('Tempo:', estimatedTime);</pre>
+            </div>
+
+            <h3>API Endpoint</h3>
+            <div class="example-code">
+                <pre>// GET /api/psbt/fees
+curl https://kraywallet-frontend.vercel.app/api/psbt/fees
+
+// Resposta:
+{
+  "success": true,
+  "fees": {
+    "high": 4,      // Próximo bloco (~10 min)
+    "halfHour": 3,  // ~30 minutos
+    "medium": 1,    // ~1 hora
+    "low": 1,       // ~2-6 horas
+    "minimum": 1    // Mínimo da rede
+  },
+  "source": "mempool.space",  // ou "bitcoin-core"
+  "timestamp": "2025-10-09T05:04:24.208Z"
+}</pre>
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <h2>🔍 Como Funciona</h2>
+            
+            <h3>1. Prioridade: Mempool.space</h3>
+            <p>O sistema tenta primeiro buscar fees da API do mempool.space, que fornece dados em tempo real da rede Bitcoin mainnet.</p>
+
+            <h3>2. Fallback: Bitcoin Core</h3>
+            <p>Se mempool.space estiver indisponível, automaticamente usa o Bitcoin Core local via RPC.</p>
+
+            <h3>3. Customização Total</h3>
+            <p>O usuário sempre pode escolher uma taxa personalizada entre 1 e 1000 sat/vB, independente das recomendações.</p>
+
+            <div class="info-box">
+                <h4>⚡ Estimativas de Tempo</h4>
+                <ul>
+                    <li><strong>High (4 sat/vB):</strong> Próximo bloco (~10 minutos)</li>
+                    <li><strong>Fast (3 sat/vB):</strong> ~30 minutos</li>
+                    <li><strong>Medium (1 sat/vB):</strong> ~1 hora</li>
+                    <li><strong>Low (1 sat/vB):</strong> ~2-6 horas</li>
+                    <li><strong>Custom:</strong> Depende do valor escolhido</li>
+                </ul>
+            </div>
+        </div>
+
+        <div style="text-align: center;">
+            <a href="/" class="back-link">← Voltar ao Marketplace</a>
+        </div>
+    </div>
+
+    <!-- Fee Selector Component -->
+    <script src="/public/js/feeSelector.js"></script>
+    
+    <script>
+        // Inicializar Fee Selector
+        const feeSelector = new FeeSelector('feeSelector', {
+            defaultMode: 'medium',
+            allowCustom: true,
+            minFee: 1,
+            maxFee: 1000,
+            onChange: (fee) => {
+                // Atualizar display
+                document.getElementById('selectedFeeAmount').textContent = `${fee} sat/vB`;
+                document.getElementById('selectedFeeDetails').textContent = 
+                    `${feeSelector.selectedMode.charAt(0).toUpperCase() + feeSelector.selectedMode.slice(1)} Priority (${feeSelector.getEstimatedTime()})`;
+                
+                console.log('✅ Fee selecionada:', fee, 'sat/vB');
+            }
+        });
+
+        // Log inicial
+        console.log('🚀 Fee Selector inicializado');
+        console.log('📊 Fees atuais:', feeSelector.fees);
+        console.log('🌐 Fonte:', feeSelector.source);
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+

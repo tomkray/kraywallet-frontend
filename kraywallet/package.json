@@ -1,0 +1,22 @@
+{
+  "name": "kraywallet",
+  "version": "1.0.0",
+  "description": "Bitcoin Wallet com suporte a SIGHASH customizado, Taproot, Ordinals e Runes",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "example": "node example.js"
+  },
+  "keywords": ["bitcoin", "wallet", "taproot", "ordinals", "runes", "psbt", "sighash"],
+  "author": "PSBT-Ordinals Marketplace",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.12.2",
+    "bip32": "^4.0.0",
+    "bip39": "^3.1.0",
+    "bitcoinjs-lib": "^6.1.7",
+    "ecpair": "^3.0.0",
+    "tiny-secp256k1": "^2.2.4"
+  }
+}
